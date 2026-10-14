@@ -1,0 +1,1654 @@
+/* ==========================================================================
+   Pi Game Center — design system.
+   Calm dark theme (near-black surfaces, restrained borders, Pi blue accent),
+   Arabic RTL, mobile-first. Bootstrap 5 RTL is imported first (with
+   data-bs-theme="dark"); these tokens + components theme it further.
+   ========================================================================== */
+
+:root {
+  /* Accent — bright on purpose, but always with dark ink on top of it. */
+  --pi-blue: #2bc6f6;
+  --pi-blue-600: #56d5fa;
+  --pi-blue-700: #7ce1fb; /* accent as text on dark surfaces */
+  --pi-blue-050: rgba(43, 198, 246, 0.12);
+  --pi-blue-100: rgba(43, 198, 246, 0.26);
+  --pi-on-accent: #06222d;
+
+  /* Secondary accent — purple, paired with the blue in ambient/smoke effects. */
+  --pi-purple: #8b5cf6;
+  --pi-purple-050: rgba(139, 92, 246, 0.12);
+
+  /* Surfaces — black with a faint cool tint, never pure #000. */
+  --pi-page: #0a0d10;
+  --pi-surface: #12161b;
+  --pi-surface-2: #171d23;
+  --pi-elevated: #1d242b;
+
+  /* Text — light on dark. */
+  --pi-ink: #e9eff4;
+  --pi-gray-800: #d7e1e8;
+  --pi-gray-600: #a9b6c1;
+  --pi-gray-500: #8895a1;
+  --pi-gray-300: #3a444e;
+  --pi-gray-200: #262e36;
+  --pi-gray-100: #1a2026;
+
+  --pi-line: #242c34;
+  --pi-line-strong: #303a44;
+  --pi-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 18px 40px rgba(0, 0, 0, 0.55);
+  --pi-shadow-sm:
+    0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 2px 8px rgba(0, 0, 0, 0.45);
+
+  /* Status colours, dimmed so the UI stays quiet. */
+  --pi-ok: #4fd39a;
+  --pi-ok-bg: rgba(79, 211, 154, 0.12);
+  --pi-warn: #f0b95e;
+  --pi-warn-bg: rgba(240, 185, 94, 0.12);
+  --pi-danger: #ff7b81;
+  --pi-danger-bg: rgba(255, 123, 129, 0.12);
+
+  --pi-radius: 14px;
+  --pi-radius-sm: 10px;
+  --pi-radius-pill: 999px;
+
+  /* Height of the sticky header (40px content + 0.6rem padding *2 + 1px border).
+     Sticky elements below it must offset by exactly this, so the header keeps a
+     fixed height on phones — see the .topbar rules. */
+  --topbar-h: 61px;
+
+  --pi-font:
+    "Tajawal", "Alexandria", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Hand Bootstrap the same palette so its utilities/forms follow the theme. */
+  --bs-body-bg: var(--pi-page);
+  --bs-body-color: var(--pi-ink);
+  --bs-emphasis-color: #fff;
+  --bs-secondary-bg: var(--pi-surface);
+  --bs-tertiary-bg: var(--pi-surface-2);
+  --bs-border-color: var(--pi-line);
+  --bs-secondary-color: var(--pi-gray-500);
+  --bs-primary-rgb: 43, 198, 246;
+  --bs-body-color-rgb: 233, 239, 244;
+  --bs-link-color: var(--pi-blue-700);
+  --bs-link-hover-color: var(--pi-blue-600);
+  --bs-form-valid-color: var(--pi-ok);
+  --bs-form-invalid-color: var(--pi-danger);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--pi-font);
+  background:
+    radial-gradient(
+      1200px 500px at 85% -10%,
+      rgba(43, 198, 246, 0.07),
+      transparent 70%
+    ),
+    var(--pi-page);
+  background-attachment: fixed;
+  color: var(--pi-ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--pi-blue-700);
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--pi-blue) 75%, transparent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+/* ----------------------------- App shell ---------------------------- */
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container-x {
+  width: min(1120px, 100% - 1.5rem);
+  margin-inline: auto;
+}
+
+@media (min-width: 900px) {
+  .container-x {
+    width: min(1120px, 100% - 2rem);
+  }
+}
+
+/* ------------------------------- Header ----------------------------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(10, 13, 16, 0.82);
+  backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid var(--pi-line);
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-block: 0.6rem;
+  min-height: calc(var(--topbar-h) - 1px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  font-weight: 800;
+  color: var(--pi-ink);
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--pi-blue), var(--pi-blue-700));
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 900;
+  box-shadow: var(--pi-shadow-sm);
+}
+
+.brand-name {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brand-name small {
+  font-weight: 600;
+  color: var(--pi-gray-500);
+  font-size: 0.72rem;
+}
+
+.table-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--pi-radius-pill);
+  background: var(--pi-blue-050);
+  color: var(--pi-blue-700);
+  border: 1px solid var(--pi-blue-100);
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Phones: keep the header to a single predictable row so the sticky category
+   strip never slides underneath it. */
+@media (max-width: 559px) {
+  .brand-name {
+    font-size: 0.92rem;
+  }
+  .brand-name small {
+    display: none;
+  }
+  .table-pill {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.55rem;
+  }
+}
+
+.table-pill.is-muted {
+  background: var(--pi-gray-100);
+  color: var(--pi-gray-600);
+  border-color: var(--pi-line);
+}
+
+/* ------------------------------- Buttons ---------------------------- */
+
+.btn-pi {
+  --_bg: var(--pi-blue);
+  --_fg: var(--pi-on-accent);
+  appearance: none;
+  border: 1px solid transparent;
+  background: var(--_bg);
+  color: var(--_fg);
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--pi-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition:
+    transform 0.06s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.25) inset,
+    0 6px 18px rgba(43, 198, 246, 0.18);
+}
+
+.btn-pi:hover:not(:disabled) {
+  background: var(--pi-blue-600);
+}
+
+.btn-pi:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-pi:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-pi-outline {
+  background: transparent;
+  color: var(--pi-blue-700);
+  border: 1px solid var(--pi-blue-100);
+  box-shadow: none;
+}
+
+.btn-pi-outline:hover:not(:disabled) {
+  background: var(--pi-blue-050);
+}
+
+.btn-ghost {
+  background: var(--pi-surface-2);
+  color: var(--pi-gray-600);
+  border: 1px solid var(--pi-line);
+  box-shadow: none;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--pi-elevated);
+  color: var(--pi-ink);
+}
+
+.btn-danger {
+  background: var(--pi-danger);
+  color: #2b0d0f;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #ff9297;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--pi-line);
+  background: var(--pi-surface-2);
+  color: var(--pi-gray-600);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.icon-btn:hover {
+  background: var(--pi-elevated);
+  color: var(--pi-ink);
+  border-color: var(--pi-line-strong);
+}
+
+.icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon-btn-danger:hover {
+  color: var(--pi-danger);
+  border-color: rgba(255, 123, 129, 0.45);
+  background: var(--pi-danger-bg);
+}
+
+/* -------------------------------- Hero ------------------------------ */
+/* Slim welcome band — the menu is what matters on a phone. */
+
+.hero {
+  background: linear-gradient(180deg, var(--pi-blue-050), transparent 78%);
+  border-bottom: 1px solid var(--pi-line);
+}
+
+.hero-inner {
+  display: grid;
+  gap: 0.6rem;
+  padding-block: 1rem 1.1rem;
+}
+
+.hero-title {
+  font-size: clamp(1.15rem, 5vw, 1.75rem);
+  font-weight: 800;
+  margin: 0;
+  color: var(--pi-ink);
+  letter-spacing: -0.01em;
+}
+
+.hero-sub {
+  color: var(--pi-gray-600);
+  margin: 0;
+  font-size: 0.9rem;
+  max-width: 52ch;
+}
+
+.hero .btn-pi {
+  justify-self: start;
+  margin-top: 0.35rem;
+}
+
+@media (min-width: 900px) {
+  .hero-inner {
+    padding-block: 1.6rem 1.8rem;
+    gap: 0.75rem;
+  }
+}
+
+/* --------------------------- Menu layout ---------------------------- */
+
+/* `minmax(0, …)` on every track: the category strip is a nowrap flex row, so its
+   min-content width (≈800px) would otherwise stretch the column and push the
+   whole page into horizontal scroll on phones. */
+.menu-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-block: 0.85rem 1.5rem;
+  align-items: start;
+}
+
+.menu-layout > * {
+  min-width: 0;
+}
+
+/* Keep the hero's "browse the menu" button from hiding the sticky strip. */
+.menu-anchor {
+  scroll-margin-top: calc(var(--topbar-h) + 62px);
+}
+
+@media (min-width: 900px) {
+  .menu-layout {
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-block: 1.5rem 2.5rem;
+  }
+}
+
+.sidebar {
+  background: var(--pi-surface);
+  border: 1px solid var(--pi-line);
+  border-radius: var(--pi-radius);
+  padding: 0.75rem;
+  box-shadow: var(--pi-shadow-sm);
+}
+
+.sidebar-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--pi-gray-500);
+  letter-spacing: 0.02em;
+  padding: 0.25rem 0.5rem 0.6rem;
+  text-transform: uppercase;
+}
+
+.cat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  text-align: start;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--pi-gray-800);
+  font: inherit;
+  font-weight: 700;
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--pi-radius-sm);
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
+}
+.cat-item i {
+  color: var(--pi-blue-700);
+  font-size: 1.1rem;
+}
+
+.cat-item:hover {
+  background: var(--pi-gray-100);
+}
+
+.cat-item.active {
+  background: var(--pi-blue-050);
+  color: var(--pi-blue-700);
+  border-color: var(--pi-blue-100);
+}
+
+.cat-item .count {
+  margin-inline-start: auto;
+  font-size: 0.75rem;
+  color: var(--pi-gray-500);
+  background: var(--pi-gray-100);
+  border-radius: var(--pi-radius-pill);
+  padding: 0.05rem 0.5rem;
+}
+
+/* Phone: the sidebar becomes a sticky, swipeable category strip. */
+@media (max-width: 899px) {
+  .sidebar {
+    position: sticky;
+    top: calc(var(--topbar-h) + 4px);
+    z-index: 20;
+    padding: 0.4rem;
+    border-radius: var(--pi-radius-sm);
+    background: color-mix(in srgb, var(--pi-page) 88%, transparent);
+    backdrop-filter: blur(10px);
+  }
+  .sidebar-title {
+    display: none;
+  }
+  .cat-list {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0.4rem;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .cat-list::-webkit-scrollbar {
+    display: none;
+  }
+  .cat-item {
+    width: auto;
+    white-space: nowrap;
+    border: 1px solid var(--pi-line);
+    padding: 0.45rem 0.7rem;
+    min-height: 40px;
+    font-size: 0.88rem;
+    scroll-snap-align: start;
+    background: var(--pi-surface);
+  }
+  .cat-item .count {
+    display: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .sidebar {
+    position: sticky;
+    top: calc(var(--topbar-h) + 15px);
+  }
+  .cat-list {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+
+/* ------------------------------ Search ------------------------------ */
+
+.search {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.search i.bi-search {
+  position: absolute;
+  inset-inline-start: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--pi-gray-500);
+  pointer-events: none;
+}
+
+.search input {
+  width: 100%;
+  font: inherit;
+  /* 16px keeps iOS from zooming the page when the field is focused. */
+  font-size: 16px;
+  padding: 0.6rem 2.5rem 0.6rem 1rem;
+  padding-inline-start: 2.5rem;
+  padding-inline-end: 2.5rem;
+  border: 1px solid var(--pi-line);
+  border-radius: var(--pi-radius-sm);
+  background: var(--pi-surface-2);
+  color: var(--pi-ink);
+}
+
+.search input::placeholder {
+  color: var(--pi-gray-500);
+}
+
+.search input:focus {
+  border-color: var(--pi-blue-100);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--pi-blue-050);
+}
+
+.search .clear {
+  position: absolute;
+  inset-inline-end: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: var(--pi-gray-500);
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.results-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.results-head h2 {
+  font-size: 1rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.results-head .muted {
+  color: var(--pi-gray-500);
+  font-size: 0.85rem;
+}
+
+/* ------------------------------- Grid ------------------------------- */
+/* Mobile-first: one compact row per item (thumb + name + price) so a guest
+   can scan the whole menu with minimal scrolling. ≥560px becomes a card grid. */
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.55rem;
+}
+
+.grid > * {
+  min-width: 0;
+}
+
+.card {
+  background: var(--pi-surface);
+  border: 1px solid var(--pi-line);
+  border-radius: var(--pi-radius-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  box-shadow: var(--pi-shadow-sm);
+}
+
+.card-media {
+  position: relative;
+  width: 86px;
+  flex: none;
+  background: var(--pi-gray-100);
+}
+
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.badge-chip {
+  position: absolute;
+  top: 0.6rem;
+  inset-inline-start: 0.6rem;
+  background: var(--pi-blue);
+  color: var(--pi-on-accent);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--pi-radius-pill);
+  box-shadow: var(--pi-shadow-sm);
+  display: none; /* no room in the phone row layout */
+}
+
+.card-body {
+  padding: 0.55rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.25rem;
+}
+
+.price {
+  color: var(--pi-blue-700);
+  font-weight: 800;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 560px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 1rem;
+  }
+  .card {
+    flex-direction: column;
+    border-radius: var(--pi-radius);
+    transition:
+      box-shadow 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .card-media {
+    width: auto;
+    aspect-ratio: 4 / 3;
+  }
+  .badge-chip {
+    display: block;
+  }
+  .card-body {
+    padding: 0.85rem 0.95rem 1rem;
+    gap: 0.35rem;
+  }
+  .card-title {
+    font-size: 1.02rem;
+  }
+  .price {
+    font-size: 1rem;
+  }
+  .card-foot {
+    padding-top: 0;
+  }
+}
+
+@media (hover: hover) and (min-width: 560px) {
+  .card:hover {
+    box-shadow: var(--pi-shadow);
+    border-color: var(--pi-line-strong);
+  }
+}
+
+.tag-off {
+  color: var(--pi-danger);
+  background: var(--pi-danger-bg);
+  border: 1px solid rgba(255, 123, 129, 0.35);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--pi-radius-pill);
+}
+
+.card.is-unavailable {
+  opacity: 0.75;
+}
+
+.card.is-unavailable .card-media img {
+  filter: grayscale(0.6);
+}
+
+/* --------------------------- Media states --------------------------- */
+
+.safe-image {
+  position: absolute;
+  inset: 0;
+}
+
+.safe-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.25s ease;
+}
+
+.media-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--pi-gray-100) 25%,
+    var(--pi-gray-200) 37%,
+    var(--pi-gray-100) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+.media-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--pi-gray-500);
+  background: linear-gradient(135deg, var(--pi-surface-2), var(--pi-gray-100));
+  font-size: 1.6rem;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* Empty / error states */
+
+.state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--pi-gray-600);
+}
+
+.state--compact {
+  padding: 1.75rem 1rem;
+}
+
+.state i {
+  font-size: 2.4rem;
+  color: var(--pi-gray-300);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------------------------- Service card -------------------------- */
+
+.service {
+  margin-block: 0.25rem 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .service {
+    margin-block: 0.5rem 2.5rem;
+  }
+}
+
+.service-card {
+  background: var(--pi-surface);
+  border: 1px solid var(--pi-line);
+  border-radius: var(--pi-radius);
+  box-shadow: var(--pi-shadow-sm);
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 900px) {
+  .service-card {
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+}
+
+.session-status {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.session-status .dot {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+}
+
+.tone-ok .dot {
+  background: var(--pi-ok-bg);
+  color: var(--pi-ok);
+}
+.tone-warn .dot {
+  background: var(--pi-warn-bg);
+  color: var(--pi-warn);
+}
+.tone-danger .dot {
+  background: var(--pi-danger-bg);
+  color: var(--pi-danger);
+}
+.tone-muted .dot {
+  background: var(--pi-gray-100);
+  color: var(--pi-gray-500);
+}
+
+.session-status .text strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.session-status .text span {
+  color: var(--pi-gray-600);
+  font-size: 0.85rem;
+}
+
+.service-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 520px) {
+  .service-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.notice {
+  border-radius: var(--pi-radius-sm);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.86rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.notice-ok {
+  background: var(--pi-ok-bg);
+  color: var(--pi-ok);
+  border: 1px solid rgba(79, 211, 154, 0.3);
+}
+
+.notice-err {
+  background: var(--pi-danger-bg);
+  color: var(--pi-danger);
+  border: 1px solid rgba(255, 123, 129, 0.3);
+}
+
+/* Command shown inside the admin-login setup hint. */
+.cmd-hint {
+  display: block;
+  margin: 0.5rem 0 0;
+  padding: 0.45rem 0.6rem;
+  background: var(--pi-gray-100);
+  border: 1px solid var(--pi-line);
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  color: var(--pi-gray-800);
+  direction: ltr;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+/* ------------------------------ Footer ------------------------------ */
+
+.site-footer {
+  margin-top: auto;
+  background: var(--pi-surface-2);
+  border-top: 1px solid var(--pi-line);
+  color: var(--pi-gray-600);
+  padding-block: 1.25rem;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 900px) {
+  .site-footer {
+    padding-block: 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+.site-footer .container-x {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-footer a {
+  color: var(--pi-blue);
+}
+
+.site-footer .muted {
+  color: var(--pi-gray-500);
+  font-size: 0.85rem;
+}
+
+/* ---------------------------- Base modal ---------------------------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 10, 0.72);
+  backdrop-filter: blur(3px);
+  display: grid;
+  z-index: 60;
+}
+
+.overlay--center {
+  place-items: center;
+  padding: 1rem;
+}
+
+.modal-panel {
+  background: var(--pi-surface);
+  border: 1px solid var(--pi-line);
+  border-radius: var(--pi-radius);
+  box-shadow: var(--pi-shadow);
+  width: min(560px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid var(--pi-line);
+  position: sticky;
+  top: 0;
+  background: var(--pi-surface);
+}
+
+.modal-head h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.modal-body {
+  padding: 1.1rem;
+}
+
+/* ------------------------------ Admin -------------------------------- */
+
+.admin-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  background: var(--pi-page);
+}
+
+.admin-side {
+  background: var(--pi-surface-2);
+  border-inline-end: 1px solid var(--pi-line);
+  color: var(--pi-gray-600);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.admin-side .brand {
+  color: var(--pi-ink);
+  margin-bottom: 0.75rem;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.5rem;
+}
+
+/* The footer block holds "open menu", the signed-in name and sign-out. */
+.admin-side-foot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.admin-side-foot .admin-link {
+  text-decoration: none;
+}
+
+.admin-user {
+  color: var(--pi-gray-500);
+  font-size: 0.8rem;
+  padding-inline: 0.7rem;
+}
+
+.admin-side-foot .admin-logout {
+  color: var(--pi-danger);
+}
+
+.admin-nav button,
+.admin-side-foot button {
+  text-align: start;
+  background: transparent;
+  border: 0;
+  color: var(--pi-gray-600);
+  font: inherit;
+  font-weight: 700;
+  padding: 0.6rem 0.7rem;
+  border-radius: var(--pi-radius-sm);
+  cursor: pointer;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.admin-nav button:hover,
+.admin-side-foot button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--pi-ink);
+}
+
+.admin-nav button.active {
+  background: var(--pi-blue);
+  color: var(--pi-on-accent);
+}
+
+.admin-side-foot .admin-logout:hover {
+  color: var(--pi-danger);
+  background: var(--pi-danger-bg);
+}
+
+.admin-main {
+  padding: 1.5rem;
+  overflow: auto;
+}
+
+.admin-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-head h1 {
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.panel {
+  background: var(--pi-surface);
+  border: 1px solid var(--pi-line);
+  border-radius: var(--pi-radius);
+  padding: 1.1rem;
+  box-shadow: var(--pi-shadow-sm);
+  margin-bottom: 1.1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.85rem;
+}
+
+.field label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--pi-gray-500);
+}
+
+.field input,
+.field textarea,
+.field select {
+  font: inherit;
+  /* 16px: avoids the iOS focus zoom on admin forms too. */
+  font-size: 16px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--pi-line);
+  border-radius: var(--pi-radius-sm);
+  background: var(--pi-elevated);
+  color: var(--pi-ink);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--pi-gray-500);
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--pi-blue-100);
+  box-shadow: 0 0 0 3px var(--pi-blue-050);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+.table-admin {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table-admin th,
+.table-admin td {
+  text-align: start;
+  padding: 0.6rem 0.7rem;
+  border-bottom: 1px solid var(--pi-line);
+  vertical-align: middle;
+}
+
+.table-admin th {
+  color: var(--pi-gray-500);
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.table-admin tr:hover td {
+  background: var(--pi-gray-100);
+}
+.row-actions {
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+.thumb {
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--pi-gray-100);
+}
+
+/* Switch */
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+}
+
+.switch .track {
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--pi-gray-300);
+  position: relative;
+  transition: background 0.15s ease;
+  flex: none;
+}
+
+.switch .track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s ease;
+  box-shadow: var(--pi-shadow-sm);
+}
+
+.switch input:checked + .track {
+  background: var(--pi-blue);
+}
+
+.switch input:checked + .track::after {
+  transform: translateX(-20px);
+}
+
+[dir="rtl"] .switch input:checked + .track::after {
+  transform: translateX(-20px);
+}
+
+/* Login */
+.login-wrap {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.login-card {
+  width: min(400px, 100%);
+  background: var(--pi-surface);
+  border: 1px solid var(--pi-line);
+  border-radius: var(--pi-radius);
+  box-shadow: var(--pi-shadow);
+  padding: 1.75rem;
+}
+
+/* Small screens: the admin shell becomes a compact sticky bar with a swipeable
+   tab strip, so panels start right above the fold instead of below a stack. */
+@media (max-width: 860px) {
+  .admin-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .admin-side {
+    position: sticky;
+    top: 0;
+    z-index: 25;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    border-inline-end: 0;
+    border-bottom: 1px solid var(--pi-line);
+  }
+  .admin-side .brand {
+    margin-bottom: 0;
+    min-width: 0;
+  }
+  .admin-side .brand-name small {
+    display: none;
+  }
+  .admin-nav {
+    order: 3;
+    flex: 1 1 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-top: 0;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .admin-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .admin-nav button {
+    flex: none;
+    white-space: nowrap;
+  }
+  .admin-side-foot {
+    order: 2;
+    margin-top: 0;
+    margin-inline-start: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .admin-side-foot .admin-link button {
+    padding-inline: 0.5rem;
+  }
+  /* Icon-only footer buttons: the bar stays one row above the tab strip. */
+  .admin-side-foot .btn-label {
+    display: none;
+  }
+  .admin-user {
+    display: none;
+  }
+  .admin-main {
+    padding: 1rem 0.75rem 2rem;
+  }
+}
+
+/* --------------------------- QR symbol ---------------------------- */
+
+.qr-code {
+  width: 100%;
+  line-height: 0;
+}
+
+.qr-code svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ------------------------- Tables / QR panel ---------------------- */
+
+.qr-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.qr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.qr-tile {
+  background: var(--pi-surface-2);
+  border: 1px solid var(--pi-line);
+  border-radius: var(--pi-radius);
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.qr-tile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.qr-tile-label {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.qr-tile-count {
+  font-size: 0.75rem;
+  color: var(--pi-gray-500);
+  background: var(--pi-gray-100);
+  border-radius: var(--pi-radius-pill);
+  padding: 0.05rem 0.5rem;
+}
+
+/* The symbol always sits on a white plate — scanners need the contrast. */
+.qr-tile-plate {
+  background: #fff;
+  border: 1px solid var(--pi-line);
+  border-radius: 12px;
+  padding: 0.65rem;
+}
+
+.qr-tile-url {
+  margin: 0;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.72rem;
+  color: var(--pi-gray-500);
+  direction: ltr;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.qr-tile-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: auto;
+}
+
+.qr-tile-actions .icon-btn {
+  width: 36px;
+  height: 36px;
+  font-size: 0.95rem;
+}
+
+/* ---------------------------- Print sheet ------------------------- */
+/* Screen: a full-height preview overlay. Print: only .qr-sheet survives. */
+
+.qr-sheet-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(4, 7, 10, 0.92);
+  overflow: auto;
+  padding: 0.75rem;
+}
+
+.qr-sheet-bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: var(--pi-surface);
+  border: 1px solid var(--pi-line);
+  border-radius: var(--pi-radius);
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 0.9rem;
+  max-width: 210mm;
+  margin-inline: auto;
+}
+
+.qr-sheet-bar-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.qr-sheet-bar-text .muted {
+  font-size: 0.8rem;
+}
+
+.qr-sheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 60mm);
+  justify-content: center;
+  gap: 5mm;
+  width: 190mm;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-bottom: 2rem;
+}
+
+/* Table tent card: 60 × 86 mm, three across an A4 sheet. */
+.qr-card {
+  width: 60mm;
+  height: 86mm;
+  background: #fff;
+  color: #10161b;
+  border-radius: 6mm;
+  padding: 4mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+  font-family: "Tajawal", system-ui, sans-serif;
+}
+
+.qr-card-head {
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  align-self: stretch;
+}
+
+.qr-card-mark {
+  flex: none;
+  width: 8mm;
+  height: 8mm;
+  border-radius: 2.5mm;
+  background: linear-gradient(135deg, #2bc6f6, #0e97c9);
+  color: #06222d;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 5mm;
+}
+
+.qr-card-venue {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  font-weight: 800;
+  font-size: 4.2mm;
+}
+
+.qr-card-venue small {
+  font-weight: 600;
+  font-size: 2.6mm;
+  color: #6b7883;
+}
+
+.qr-card-plate {
+  flex: 1;
+  width: 100%;
+  display: grid;
+  /* Explicit 1fr track: without it the implicit row is sized to the symbol's
+     own height, so the QR would outgrow the plate and sit on top of the text. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  place-items: center;
+  min-height: 0;
+}
+
+/* Keep the symbol inside the plate: the SVG letterboxes to the smaller of the
+   two axes, so it can never spill over the text below it. */
+.qr-card-plate .qr-code {
+  width: 100%;
+  height: 100%;
+}
+
+.qr-card-plate .qr-code svg {
+  width: 100%;
+  height: 100%;
+}
+
+.qr-card-cta {
+  margin: 0;
+  font-size: 2.9mm;
+  font-weight: 700;
+  color: #3a444e;
+}
+
+.qr-card-table {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2mm;
+  align-self: stretch;
+  background: #f1f5f7;
+  border-radius: 2.5mm;
+  padding: 1.6mm 2.5mm;
+}
+
+.qr-card-table span {
+  font-size: 3mm;
+  font-weight: 700;
+  color: #6b7883;
+}
+
+.qr-card-table strong {
+  font-size: 6mm;
+  font-weight: 900;
+  line-height: 1;
+  color: #10161b;
+}
+
+.qr-card-url {
+  margin: 0;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 1.9mm;
+  color: #8895a1;
+  direction: ltr;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  /* Only the sheet is printed — the app, the panel and the preview bar go. */
+  body.qr-printing #app,
+  body.qr-printing .qr-sheet-bar,
+  body.qr-printing .overlay {
+    display: none !important;
+  }
+
+  body.qr-printing {
+    background: #fff !important;
+  }
+
+  body.qr-printing .qr-sheet-scrim {
+    position: static;
+    inset: auto;
+    overflow: visible;
+    padding: 0;
+    background: none;
+  }
+
+  body.qr-printing .qr-sheet {
+    width: auto;
+    max-width: none;
+    padding: 0;
+    margin: 0;
+    gap: 4mm;
+  }
+
+  body.qr-printing .qr-card {
+    border: 0.3mm dashed #c5ced6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
